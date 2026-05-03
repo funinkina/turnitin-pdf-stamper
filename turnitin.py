@@ -1,5 +1,7 @@
 import argparse
 import io
+import random
+import string
 from pathlib import Path
 
 from reportlab.lib.colors import HexColor
@@ -38,6 +40,12 @@ BOTTOM_PAGE_PADDING = 14  # space from bottom edge → footer band
 # ── Custom TTF font path ──
 FONT_PATH = "NotoSans.ttf"
 FONT_NAME = "CustomFont"
+
+def generate_submission_id():
+    part1 = "".join(random.choices(string.digits, k=3))
+    part2 = "".join(random.choices(string.digits, k=12))
+    return f"trn:oid:::{part1}:{part2}"
+
 
 # ── Image native aspect ratio (1392 × 417) ──
 IMG_ASPECT = 1392 / 417
@@ -179,8 +187,14 @@ def main():
     parser.add_argument(
         "--image", default="", help="Path to image (1392x417 or any aspect ratio)"
     )
-    parser.add_argument("--left-label", default="", help="Text after 'Page X of Y  -'")
-    parser.add_argument("--right-label", default="", help="Right-aligned label")
+    parser.add_argument(
+        "--left-label", default="AI Writing Submission", help="Text after 'Page X of Y  -'"
+    )
+    parser.add_argument(
+        "--right-label",
+        default=f"Submission ID   {generate_submission_id()}",
+        help="Right-aligned label",
+    )
     parser.add_argument(
         "--bg-color", default="", help="Band background hex color, e.g. #f5f5f5"
     )
