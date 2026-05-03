@@ -188,7 +188,6 @@ def main():
         "--border-color", default="#cccccc", help="Inner border line color"
     )
     parser.add_argument("--text-color", default="#000000", help="Text color hex")
-    parser.add_argument("--font-size", default=6, type=int, help="Font size in points")
     args = parser.parse_args()
 
     config = {
@@ -199,7 +198,7 @@ def main():
         "border_color": args.border_color,
         "text_color": args.text_color,
         "font": FONT_NAME if FONT_PATH and Path(FONT_PATH).exists() else "Helvetica",
-        "font_size": args.font_size,
+        "font_size": 6,
     }
 
     stamp_pdf(args.input, args.output, config)
