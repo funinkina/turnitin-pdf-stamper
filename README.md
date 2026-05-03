@@ -1,4 +1,4 @@
-# Turnitin Stamper
+# Turnitin Report Generator
 
 Create a realistic looking Turnitin AI/Plaigarism Report
 ## Like this:
