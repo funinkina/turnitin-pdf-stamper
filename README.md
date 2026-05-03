@@ -23,6 +23,9 @@ pip install -r requirements.txt
 # Ensure NotoSans.ttf is in the project directory
 ```
 
+## Cover Pages
+You can generate the cover page by copying and editing the details from [this figma file](https://www.figma.com/design/yzG131TMlxJOTZa20ypjX3/Turnitin-Cover-Pages?node-id=0-1&t=vtIJIfl2RmTrdT2H-1)
+
 ## Usage
 
 ```bash
