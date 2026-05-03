@@ -1,6 +1,8 @@
 # Turnitin Stamper
 
 Create a realistic looking Turnitin AI/Plaigarism Report
+## Like this:
+<img width="1988" height="688" alt="image" src="https://github.com/user-attachments/assets/ef855417-ec4a-4599-8f87-41cc5037e0cd" />
 
 ## Setup
 
