@@ -1,7 +1,10 @@
 import argparse
 import io
 import random
+import re
 import string
+import tempfile
+import urllib.request
 from pathlib import Path
 
 from reportlab.lib.colors import HexColor
@@ -38,8 +41,32 @@ TOP_PAGE_PADDING = 10  # space from top edge → header band
 BOTTOM_PAGE_PADDING = 14  # space from bottom edge → footer band
 
 # ── Custom TTF font path ──
-FONT_PATH = "NotoSans.ttf"
 FONT_NAME = "CustomFont"
+GOOGLE_FONTS_CSS_URL = (
+    "https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400&display=swap"
+)
+
+
+def get_font_path():
+    tmp_dir = tempfile.gettempdir()
+    font_path = Path(tmp_dir) / "NotoSans.ttf"
+
+    if not font_path.exists():
+        print(f"Downloading NotoSans.ttf to {font_path}...")
+
+        with urllib.request.urlopen(GOOGLE_FONTS_CSS_URL) as response:
+            css = response.read().decode()
+
+        match = re.search(r"url\((https://[^)]+\.ttf)\)", css)
+        if not match:
+            raise RuntimeError("Could not find TTF URL in Google Fonts CSS")
+
+        ttf_url = match.group(1)
+        urllib.request.urlretrieve(ttf_url, font_path)
+        print("Font downloaded.")
+
+    return str(font_path)
+
 
 def generate_submission_id():
     part1 = "".join(random.choices(string.digits, k=3))
@@ -174,10 +201,11 @@ def stamp_pdf(input_path, output_path, config):
 #  CLI
 # ─────────────────────────────────────────────────────────────────────
 def main():
-    if FONT_PATH and Path(FONT_PATH).exists():
-        pdfmetrics.registerFont(TTFont(FONT_NAME, FONT_PATH))
+    font_path = get_font_path()
+    if Path(font_path).exists():
+        pdfmetrics.registerFont(TTFont(FONT_NAME, font_path))
     else:
-        print(f"[warn] Font not found at {FONT_PATH}, falling back to Helvetica")
+        print(f"[warn] Font not found at {font_path}, falling back to Helvetica")
 
     parser = argparse.ArgumentParser(
         description="Stamp identical header & footer bands onto every PDF page"
@@ -185,10 +213,12 @@ def main():
     parser.add_argument("input", help="Input PDF path")
     parser.add_argument("output", help="Output PDF path")
     parser.add_argument(
-        "--image", default="", help="Path to image (1392x417 or any aspect ratio)"
+        "--image", default="logo.jpg", help="Path to image (1392x417 or any aspect ratio)"
     )
     parser.add_argument(
-        "--left-label", default="AI Writing Submission", help="Text after 'Page X of Y  -'"
+        "--left-label",
+        default="AI Writing Submission",
+        help="Text after 'Page X of Y  -'",
     )
     parser.add_argument(
         "--right-label",
@@ -207,7 +237,7 @@ def main():
         "right_label": args.right_label,
         "bg_color": args.bg_color,
         "text_color": args.text_color,
-        "font": FONT_NAME if FONT_PATH and Path(FONT_PATH).exists() else "Helvetica",
+        "font": FONT_NAME if font_path and Path(font_path).exists() else "Helvetica",
         "font_size": 6,
     }
 
