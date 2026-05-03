@@ -198,9 +198,6 @@ def main():
     parser.add_argument(
         "--bg-color", default="", help="Band background hex color, e.g. #f5f5f5"
     )
-    parser.add_argument(
-        "--border-color", default="#cccccc", help="Inner border line color"
-    )
     parser.add_argument("--text-color", default="#000000", help="Text color hex")
     args = parser.parse_args()
 
@@ -209,7 +206,6 @@ def main():
         "left_label": args.left_label,
         "right_label": args.right_label,
         "bg_color": args.bg_color,
-        "border_color": args.border_color,
         "text_color": args.text_color,
         "font": FONT_NAME if FONT_PATH and Path(FONT_PATH).exists() else "Helvetica",
         "font_size": 6,
