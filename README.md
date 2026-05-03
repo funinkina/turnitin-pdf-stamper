@@ -8,8 +8,8 @@ Create a realistic looking Turnitin AI/Plaigarism Report
 
 ```bash
 # Clone the repository
-git clone <repo-url>
-cd turnitin-stamper
+git clone https://github.com/funinkina/turnitin-pdf-stamper.git
+cd turnitin-pdf-stamper
 
 # Create virtual environment
 python -m venv .venv
